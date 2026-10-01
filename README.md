@@ -46,6 +46,28 @@ Notes:
 - Untuk popup/alert sebenarnya bisa memakai firebase atau websocket. Akan tetapi saya rasa SSE lebih simple dan lebih cocok dan cukup menjawab kebutuhan
 
 - Begitu juga untuk keperluan Pub-Sub, menurut saya Kafka, RabitMQ, AWS SQS, GCP Pub-
-  Sub terlalu overkill, dan membutuhkan setup yang cukup kompleks, sehingga untuk kebutuhan yang simple seperti logging dan alert saya memilih fitur Pub-Sub dari Redis.
+  Sub terlalu overkill, dan membutuhkan setup yang cukup kompleks, sehingga untuk kebutuhan yang simple seperti logging dan alert saya memilih fitur Pub-Sub dari Redis. Akan tetapi di sini saya menggunakan adapter pattern sehingga mudah untuk diswap ke teknologi tersebut jika memang diperlukan
 
-- Berdasarkan requirement, ketika ada perubahan data karyawan, data harus masuk ke message queue untuk kemudian dimasukkan ke database terpisah. Untuk simplifikasi, saya tidak akan menggunakan databse terpisah untuk logging, melainkan hanya akan membuat table tersendiri di dalam database postgresql yang sudah ada.
+- Berdasarkan requirement, ketika ada perubahan data karyawan, data harus masuk ke message queue untuk kemudian dimasukkan ke database terpisah untuk kebutuhan logging. Untuk simplifikasi, saya tidak akan menggunakan database terpisah, melainkan hanya akan membuat table tersendiri di dalam database postgresql yang sudah ada.
+
+## Database Design
+
+```mermaid
+erDiagram
+    KARYAWAN {
+        uuid id
+        text name
+        text email
+        text photoURL
+        text position
+        text phone_number
+        text password
+    }
+    ABSENSI {
+        uuid id
+        uuid karyawan_id
+        timestamp created_at
+        enum status
+    }
+    KARYAWAN ||--o{ ABSENSI : absen
+```

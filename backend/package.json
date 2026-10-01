@@ -1,0 +1,43 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NestJS REST and SSE API",
+  "scripts": {
+    "build": "nest build",
+    "test": "npm run build --silent && node --test",
+    "migrate:up": "npm run build --silent && node --env-file-if-exists=.env dist/migrate.js up",
+    "migrate:down": "npm run build --silent && node --env-file-if-exists=.env dist/migrate.js down",
+    "start": "node dist/main.js",
+    "start:dev": "nest start --watch",
+    "typecheck": "tsc --noEmit",
+    "services:up": "docker compose up -d",
+    "services:down": "docker compose down"
+  },
+  "type": "commonjs",
+  "dependencies": {
+    "@nestjs/common": "^12.1.2",
+    "@nestjs/config": "^12.0.1",
+    "@nestjs/core": "^12.1.2",
+    "@nestjs/jwt": "^12.0.2",
+    "@nestjs/platform-express": "^12.1.2",
+    "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "pg": "^8.23.1",
+    "redis": "^6.3.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^12.0.8",
+    "@nestjs/schematics": "^12.0.6",
+    "@types/bcrypt": "^6.0.0",
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.3",
+    "@types/pg": "^8.23.1",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^6.0.3"
+  }
+}
