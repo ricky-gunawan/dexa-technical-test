@@ -11,8 +11,8 @@ const records = [
 test('filters and cursor-paginates attendance records', async () => {
   const calls = [];
   const database = {
-    query: async (_sql, values) => {
-      calls.push(values);
+    query: async (sql, values) => {
+      calls.push({ sql, values });
       return { rows: calls.length === 1 ? records : [] };
     },
   };
@@ -22,11 +22,12 @@ test('filters and cursor-paginates attendance records', async () => {
   assert.equal(page.data.length, 2);
   assert.ok(page.nextCursor);
   await service.findAll({ cursor: page.nextCursor, limit: 2 });
-  assert.equal(calls[0][5], 3);
-  assert.equal(calls[1][2].toISOString(), records[1].createdAt.toISOString());
-  assert.equal(calls[1][3], records[1].id);
+  assert.match(calls[0].sql, /JOIN "user"/);
+  assert.equal(calls[0].values[5], 3);
+  assert.equal(calls[1].values[2].toISOString(), records[1].createdAt.toISOString());
+  assert.equal(calls[1].values[3], records[1].id);
 
   const userId = '00000000-0000-4000-8000-000000000004';
   await service.findAll({ userId, limit: 2 });
-  assert.equal(calls[2][4], userId);
+  assert.equal(calls[2].values[4], userId);
 });
