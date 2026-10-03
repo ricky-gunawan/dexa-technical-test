@@ -23,7 +23,7 @@ import { UserUpdateEventsService } from "./user-update-events.service";
 export class CreateUserDto {
   @IsString() @MinLength(1) name!: string;
   @IsEmail() email!: string;
-  @IsOptional() @IsUrl() photoURL?: string;
+  @IsOptional() @IsUrl({ require_tld: false }) photoURL?: string;
   @IsString() @MinLength(1) position!: string;
   @IsOptional() @IsString() phoneNumber?: string;
   @IsString() @MinLength(8) password!: string;
@@ -32,7 +32,7 @@ export class CreateUserDto {
 export class UpdateUserDto {
   @IsOptional() @IsString() @MinLength(1) name?: string;
   @IsOptional() @IsEmail() email?: string;
-  @IsOptional() @IsUrl() photoURL?: string;
+  @IsOptional() @IsUrl({ require_tld: false }) photoURL?: string;
   @IsOptional() @IsString() @MinLength(1) position?: string;
   @IsOptional() @IsString() phoneNumber?: string;
   @IsOptional() @IsString() @MinLength(8) password?: string;
