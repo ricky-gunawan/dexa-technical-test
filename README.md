@@ -1,15 +1,17 @@
-## Folder structure
+## Struktur project
 
 Di repository ini terdapat 3 aplikasi: backend, frontend absensi (untuk karyawan), dan frontend monitoring (Admin HRD). Dengan struktur folder sebagai berikut:
 
-```
+```text
 .
-├── backend
-│   └── src/
-├── fe-absensi
-│   └── src/
-├── fe-monitoring
-│   └── src/
+├── backend/
+│   ├── migrations/
+│   ├── src/
+│   └── test/
+├── fe-absensi/
+│   └── src/
+├── fe-monitoring/
+│   └── src/
 └── README.md
 ```
 
@@ -39,7 +41,7 @@ flowchart LR
     Redis --> |"Popup/alert (using SSE)"| FE-Monitoring
 ```
 
-Tech stack: Typescript, React.js, Tailwind CSS, NestJS, PostgreSQL, SSE (untuk popup/alert di halaman admin), dan Redis (untuk Pub-Sub).
+Tech stack: Typescript, React.js, Tailwind CSS, Tanstack Router, Tanstack Query, NestJS, PostgreSQL, SSE (untuk popup/alert di halaman admin), dan Redis (untuk Pub-Sub).
 
 Notes:
 
@@ -54,20 +56,74 @@ Notes:
 
 ```mermaid
 erDiagram
-    KARYAWAN {
+    USER ||--o{ ABSENSI : records
+    USER {
         uuid id
         text name
         text email
-        text photoURL
+        text photo_url
         text position
         text phone_number
         text password
     }
     ABSENSI {
         uuid id
-        uuid karyawan_id
-        timestamp created_at
+        uuid user_id
+        timestamptz created_at
         enum status
     }
-    KARYAWAN ||--o{ ABSENSI : absen
+    LOG {
+        uuid id
+        uuid user_id
+        jsonb changes
+        timestamptz created_at
+    }
 ```
+
+## Menjalankan project
+
+Prasyarat:
+
+- Node.js 20 atau lebih baru
+- npm
+- Docker dengan Docker Compose (untuk local postgresql dan redis)
+
+### 1. Backend dan service lokal
+
+```bash
+cd backend
+cp .env.example .env
+npm install
+npm run services:up     # menjalankan docker container postgresql dan redis
+npm run migrate:up      # membuat sql table dan akun demo
+npm run start:dev
+```
+
+Backend tersedia di `http://localhost:3000`.
+
+Akun demo:
+
+| Peran    | Email                  | Password       |
+| -------- | ---------------------- | -------------- |
+| Admin    | `admin@hadir.local`    | `Admin123!`    |
+| Karyawan | `karyawan@hadir.local` | `Karyawan123!` |
+
+### 2. Frontend absensi
+
+```bash
+cd fe-absensi
+npm install
+npm run dev
+```
+
+Frontend absensi tersedia di `http://localhost:5173`.
+
+### 3. Frontend monitoring
+
+```bash
+cd fe-monitoring
+npm install
+npm run dev
+```
+
+Frontend monitoring tersedia di `http://localhost:5174`.
