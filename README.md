@@ -1,3 +1,6 @@
+![Hadir Absensi](./Screenshot-hadir-absensi.png)
+![Hadir Monitoring](./Screenshot-hadir-monitoring.png)
+
 ## Struktur project
 
 Di repository ini terdapat 3 aplikasi: backend, frontend absensi (untuk karyawan), dan frontend monitoring (Admin HRD). Dengan struktur folder sebagai berikut:
